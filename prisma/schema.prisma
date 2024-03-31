@@ -13,7 +13,7 @@ datasource db {
 model Product {
   id                      String    @id @default(uuid())
   name                    String
-  priceInCents            String
+  priceInCents            Int
   filePath                String
   imagePath               String
   description             String
@@ -22,7 +22,7 @@ model Product {
   updatedAt               DateTime  @updatedAt
 
   orders  Order[]
-  
+
   downloadVerifications  DownloadVerification[]
 }
 
