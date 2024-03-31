@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import PageHeader from "../_components/PageHeader"
+import {PageHeader} from "../_components/PageHeader"
 import Link from "next/link"
 import {
   Table,
@@ -15,7 +15,7 @@ export default function AdminProductPage() {
       <div className="flex justify-between items-center gap-4">
         <PageHeader>Products</PageHeader>
         <Button>
-          <Link href="/admin/products/new">Add </Link>
+          <Link href="/admin/products/new">Add Product</Link>
         </Button>
       </div>
       <ProductsTable />
