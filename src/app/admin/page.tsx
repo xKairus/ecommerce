@@ -13,11 +13,16 @@ async function getSalesData() {
     _sum: { pricePaidInCents: true },
     _count: true,
   })
+  await wait(1500)
 
   return {
-    amout: (data._sum.pricePaidInCents || 0) / 100,
+    amount: (data._sum.pricePaidInCents || 0) / 100,
     numberOfSales: data._count,
   }
+}
+
+function wait(duration: number) {
+  return new Promise((resolve) => setTimeout(resolve, duration))
 }
 
 async function getUserData() {
@@ -42,13 +47,14 @@ async function getUserData() {
 }
 
 async function getProductData() {
-  const [activeCount, inactiveCount] = await Promise.all ([    
-    db.product.count({where: {isAvailableForPurchase: true}}),
-    db.product.count({where: {isAvailableForPurchase: false}})
+  const [activeCount, inactiveCount] = await Promise.all([
+    db.product.count({ where: { isAvailableForPurchase: true } }),
+    db.product.count({ where: { isAvailableForPurchase: false } }),
   ])
-  
-  return{
-    activeCount, inactiveCount
+
+  return {
+    activeCount,
+    inactiveCount,
   }
 }
 
@@ -58,7 +64,7 @@ export default async function AdminDashboard() {
   const [salesData, userData, productData] = await Promise.all([
     getSalesData(),
     getUserData(),
-    getProductData()
+    getProductData(),
   ])
 
   return (
@@ -66,16 +72,20 @@ export default async function AdminDashboard() {
       <DashboardCard
         title="Sales"
         subtitle={`${formatNumber(salesData.numberOfSales)} Orders`}
-        body={formatCurrency(salesData.amout)}
+        body={formatCurrency(salesData.amount)}
       />
       <DashboardCard
         title="Customers"
-        subtitle={`${formatCurrency(userData.averageValuePerUser)} Average Value`}
+        subtitle={`${formatCurrency(
+          userData.averageValuePerUser
+        )} Average Value`}
         body={formatNumber(userData.userCount)}
       />
       <DashboardCard
         title="Active Products"
-        subtitle={`${formatNumber(productData.inactiveCount)} Inactive Products`}
+        subtitle={`${formatNumber(
+          productData.inactiveCount
+        )} Inactive Products`}
         body={formatNumber(productData.activeCount)}
       />
     </div>
