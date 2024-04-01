@@ -1,9 +1,10 @@
-import ProductCard from "@/components/ProductCard"
+import { ProductCard, ProductCardSkeleton } from "@/components/ProductCard"
 import { Button } from "@/components/ui/button"
 import db from "@/db/db"
 import { Product } from "@prisma/client"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { Suspense } from "react"
 
 function getMostPopularProducts() {
   return db.product.findMany({
@@ -41,7 +42,7 @@ type ProductGridSectionProps = {
   title: string
 }
 
-async function ProductGridSection({
+function ProductGridSection({
   productsFetcher,
   title,
 }: ProductGridSectionProps) {
@@ -57,16 +58,28 @@ async function ProductGridSection({
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 ld:grid-cols-3 gap-4">
-        {(await productsFetcher()).map((product) => (
-          <ProductCard
-            id={product.id}
-            name={product.name}
-            description={product.description}
-            priceInCents={product.priceInCents}
-            imagePath={product.imagePath}
-          />
-        ))}
+        <Suspense
+          fallback={
+            <>
+              <ProductCardSkeleton />
+              <ProductCardSkeleton />
+              <ProductCardSkeleton />
+            </>
+          }
+        >
+          <ProductsSuspense productsFetcher={productsFetcher} />
+        </Suspense>
       </div>
     </div>
   )
+}
+
+async function ProductsSuspense({
+  productsFetcher,
+}: {
+  productsFetcher: () => Promise<Product[]>
+}) {
+  return (await productsFetcher()).map((product) => (
+    <ProductCard key={product.id} {...product} />
+  ))
 }
