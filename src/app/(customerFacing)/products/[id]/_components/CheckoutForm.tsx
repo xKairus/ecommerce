@@ -130,6 +130,11 @@ function Form({
             />
           </div>
         </CardContent>
+        <div className="flex justify-center mb-4 text-muted-foreground">
+          <span>
+            To test the functionality, you can enter random information.
+          </span>
+        </div>
         <CardFooter>
           <Button
             className="w-full"

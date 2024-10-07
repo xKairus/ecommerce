@@ -1,4 +1,4 @@
-import { Nav, NavLink } from "@/components/Nav"
+import { Nav, NavLink, AdminButton } from "@/components/Nav"
 
 export const dynamic = "force-dynamic"
 
@@ -13,6 +13,7 @@ export default function Layout({
         <NavLink href="/">Home</NavLink>
         <NavLink href="/products">Products</NavLink>
         <NavLink href="/orders">My Orders</NavLink>
+        <AdminButton></AdminButton>
       </Nav>
       <div className="container my-6">{children}</div>
     </>
